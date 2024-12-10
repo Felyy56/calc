@@ -3,248 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Calculator - by Noel Abrahamsson</title>
-    <meta name="description" content="Calculate the energy required to lift an object using mass, gravity, and height. Created by Noel Abrahamsson.">
+    <title>Energy Calculator</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
             display: flex;
-            flex-direction: column;
-        }
-        .container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            height: 100vh;
         }
         .calculator {
-            background: white;
+            background: #fff;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 100%;
+            padding: 20px;
             max-width: 500px;
+            width: 100%;
         }
         h1 {
-            color: #333;
             text-align: center;
-            margin-bottom: 30px;
+            color: #333;
+            margin-bottom: 20px;
         }
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         label {
             display: block;
+            color: #555;
             margin-bottom: 5px;
-            color: #666;
         }
         input[type="number"], input[type="range"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            margin-bottom: 5px;
         }
         input[type="range"] {
             -webkit-appearance: none;
-            height: 10px;
             background: #ddd;
+            height: 8px;
+            border-radius: 5px;
             outline: none;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-        input[type="range"]:hover {
-            opacity: 1;
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             background: #4CAF50;
-            cursor: pointer;
             border-radius: 50%;
-        }
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: #4CAF50;
             cursor: pointer;
-            border-radius: 50%;
         }
-.result {
-    font-size: 18px;
-    text-align: center;
-    color: #333;
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-        .result-item {
-            background: #f0f0f0;
-            border-radius: 8px;
-            padding: 10px;
-            box-sizing: border-box;
+        .result {
+            margin-top: 20px;
+            text-align: center;
         }
         .result-value {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 20px;
             color: #4CAF50;
-            min-height: 36px; /* Set a minimum height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: auto;
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .agreement-box {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 600px;
-        }
-        .agreement-text {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        .agreement-actions {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-        .accept-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-left: 10px;
-            transition: all 0.3s ease;
-        }
-        .owner-info {
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
-            color: #333;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="calculator">
-            <h1>Lift Energy Calculator</h1>
-            <div class="input-group">
-                <label for="mass">Mass (kg):</label>
-                <input type="number" id="mass" min="0" step="0.1" value="1">
-                <input type="range" id="massRange" min="0" max="1000" step="0.1" value="1">
-            </div>
-            <div class="input-group">
-                <label for="gravity">Gravity (m/s²):</label>
-                <input type="number" id="gravity" min="0" step="0.1" value="9.8">
-                <input type="range" id="gravityRange" min="0" max="20" step="0.1" value="9.8">
-            </div>
-            <div class="input-group">
-                <label for="height">Height (m):</label>
-                <input type="number" id="height" min="0" step="0.1" value="1">
-                <input type="range" id="heightRange" min="0" max="100" step="0.1" value="1">
-            </div>
-            <div class="result" id="result">
-                <div class="result-item">
-                    <div>Energy (J)</div>
-                    <div class="result-value" id="energyJoules">0</div>
-                </div>
-                <div class="result-item">
-                    <div>Energy (cal)</div>
-                    <div class="result-value" id="energyCalories">0</div>
-                </div>
-                <div class="result-item">
-                    <div>Power (W)</div>
-                    <div class="result-value" id="powerWatts">0</div>
-                </div>
-                <div class="result-item">
-                    <div>Force (N)</div>
-                    <div class="result-value" id="forceNewtons">0</div>
-                </div>
-            </div>
-            <div class="owner-info">
-                Created by Noel Abrahamsson
-            </div>
+    <div class="calculator">
+        <h1>Lift Energy Calculator</h1>
+        <div class="input-group">
+            <label for="mass">Mass (kg):</label>
+            <input type="number" id="mass" min="0" step="0.1" value="1">
+            <input type="range" id="massRange" min="0" max="1000" step="0.1" value="1">
         </div>
-    </div>
-    <footer>
-        &copy; 2023 Energy Calculator by Noel Abrahamsson. All rights reserved.
-    </footer>
-    <div class="overlay" id="agreementOverlay">
-        <div class="agreement-box">
-            <h2>User Agreement</h2>
-            <div class="agreement-text">
-                <p>Welcome to the Energy Calculator created by Noel Abrahamsson. By using this website, you agree to the following terms and conditions:</p>
-                <ol>
-                    <li>The calculations provided are for informational purposes only and should not be used for critical applications without professional verification.</li>
-                    <li>Noel Abrahamsson is not responsible for any misuse, misinterpretation, or consequences arising from the use of the results provided by this calculator.</li>
-                    <li>Your personal data will not be collected, stored, or shared with any third parties.</li>
-                    <li>This agreement may be updated at any time without prior notice. It is your responsibility to review these terms periodically.</li>
-                    <li>The calculator is provided "as is" without any warranties, express or implied.</li>
-                    <li>You agree not to use this calculator for any unlawful or prohibited purposes.</li>
-                    <li>Noel Abrahamsson reserves the right to modify, suspend, or discontinue the calculator at any time without notice.</li>
-                    <li>By using this calculator, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.</li>
-                    <li>The results provided by this calculator are based on simplified models and may not account for all real-world factors.</li>
-                    <li>You are responsible for verifying the accuracy of the calculations for your specific use case.</li>
-                    <li>This calculator is not a substitute for professional advice or consultation with experts in the field.</li>
-                    <li>Noel Abrahamsson does not guarantee the availability, reliability, or performance of this calculator.</li>
-                    <li>You agree to use this calculator at your own risk and discretion.</li>
-                    <li>Any reliance you place on the information provided by this calculator is strictly at your own risk.</li>
-                    <li>Noel Abrahamsson is not liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of this calculator.</li>
-                    <li>You agree to indemnify and hold harmless Noel Abrahamsson from any claims resulting from your use of this calculator.</li>
-                    <li>This calculator may contain links to third-party websites. Noel Abrahamsson is not responsible for the content or privacy practices of these sites.</li>
-                    <li>You may not attempt to reverse engineer, decompile, or modify any part of this calculator.</li>
-                    <li>Noel Abrahamsson reserves the right to terminate your access to this calculator for any reason, without notice.</li>
-                    <li>This agreement is governed by the laws of the jurisdiction where Noel Abrahamsson resides.</li>
-                    <li>If any provision of this agreement is found to be invalid or unenforceable, the remaining provisions will remain in full force and effect.</li>
-                    <li>This agreement constitutes the entire agreement between you and Noel Abrahamsson regarding the use of this calculator.</li>
-                </ol>
-            </div>
-
-
-            <div class="agreement-actions">
-                <label>
-                    <input type="checkbox" id="acceptCheckbox"> I accept the terms and conditions
-                </label>
-                <button class="accept-btn" id="acceptBtn" disabled>Accept</button>
-            </div>
+        <div class="input-group">
+            <label for="gravity">Gravity (m/s²):</label>
+            <input type="number" id="gravity" min="0" step="0.1" value="9.8">
+            <input type="range" id="gravityRange" min="0" max="20" step="0.1" value="9.8">
+        </div>
+        <div class="input-group">
+            <label for="height">Height (m):</label>
+            <input type="number" id="height" min="0" step="0.1" value="1">
+            <input type="range" id="heightRange" min="0" max="100" step="0.1" value="1">
+        </div>
+        <div class="result">
+            <div>Energy (J): <span class="result-value" id="energyJoules">0</span></div>
+            <div>Energy (cal): <span class="result-value" id="energyCalories">0</span></div>
         </div>
     </div>
     <script>
@@ -256,87 +97,34 @@
         const heightRange = document.getElementById('heightRange');
         const energyJoules = document.getElementById('energyJoules');
         const energyCalories = document.getElementById('energyCalories');
-        const powerWatts = document.getElementById('powerWatts');
-        const forceNewtons = document.getElementById('forceNewtons');
- function syncInputs(input, range) {
-     range.value = input.value;
- }
-        
- function animateValue(element, start, end, duration) {
-     const startTime = performance.now();
 
-     function update(currentTime) {
-         const elapsedTime = currentTime - startTime;
-         if (elapsedTime > duration) {
-             element.textContent = end.toFixed(2);
-             element.style.animation = 'pulse 0.5s ease-in-out';
-             setTimeout(() => {
-                 element.style.animation = '';
-             }, 500);
-             return;
-         }
+        const syncInputs = (input, range) => {
+            input.value = range.value;
+            range.value = input.value;
+            calculateEnergy();
+        };
 
-         const progress = elapsedTime / duration;
-         const currentValue = start + (end - start) * progress;
-         element.textContent = currentValue.toFixed(2);
-         requestAnimationFrame(update);
-     }
+        const calculateEnergy = () => {
+            const mass = parseFloat(massInput.value);
+            const gravity = parseFloat(gravityInput.value);
+            const height = parseFloat(heightInput.value);
 
-     requestAnimationFrame(update);
- }
+            const energy = mass * gravity * height;
+            const calories = energy * 0.239006;
 
- function calculateEnergy() {
-     const mass = parseFloat(massInput.value);
-     const gravity = parseFloat(gravityInput.value);
-     const height = parseFloat(heightInput.value);
+            energyJoules.textContent = energy.toFixed(2);
+            energyCalories.textContent = calories.toFixed(2);
+        };
 
-     const energy = mass * gravity * height;
-     const calories = energy * 0.239006; // Convert joules to calories
-     const power = energy; // Assuming 1 second for simplicity
-     const force = mass * gravity;
+        [massInput, gravityInput, heightInput].forEach(input => {
+            input.addEventListener('input', () => syncInputs(input, document.getElementById(`${input.id}Range`)));
+        });
 
-     animateValue(energyJoules, parseFloat(energyJoules.textContent), energy, 300);
-     animateValue(energyCalories, parseFloat(energyCalories.textContent), calories, 300);
-     animateValue(powerWatts, parseFloat(powerWatts.textContent), power, 300);
-     animateValue(forceNewtons, parseFloat(forceNewtons.textContent), force, 300);
- }
+        [massRange, gravityRange, heightRange].forEach(range => {
+            range.addEventListener('input', () => syncInputs(document.getElementById(range.id.replace('Range', '')), range));
+        });
 
- [massInput, gravityInput, heightInput].forEach(input => {
-     input.addEventListener('input', () => {
-         syncInputs(input, input.nextElementSibling);
-         calculateEnergy();
-     });
- });
-
- [massRange, gravityRange, heightRange].forEach(range => {
-     range.addEventListener('input', () => {
-         syncInputs(range.previousElementSibling, range);
-         calculateEnergy();
-     });
- });
-        
-
-        calculateEnergy();
- // User Agreement Overlay
- const overlay = document.getElementById('agreementOverlay');
- const acceptCheckbox = document.getElementById('acceptCheckbox');
- const acceptBtn = document.getElementById('acceptBtn');
-
- acceptCheckbox.addEventListener('change', () => {
-     acceptBtn.disabled = !acceptCheckbox.checked;
- });
-
- acceptBtn.addEventListener('click', () => {
-     if (acceptCheckbox.checked) {
-         overlay.style.display = 'none';
-     }
- });
-
- // Ensure the overlay is visible when the page loads
- window.addEventListener('load', () => {
-     overlay.style.display = 'flex';
- });
-        ;
+        calculateEnergy(); // Initial calculation
     </script>
 </body>
 </html>
