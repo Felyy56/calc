@@ -239,28 +239,74 @@
         </div>
     </div>
 
-    <script>
-        const nameInput = document.getElementById('nameInput');
-        const userSignature = document.getElementById('userSignature');
-        const acceptCheckbox = document.getElementById('acceptCheckbox');
-        const acceptBtn = document.getElementById('acceptBtn');
+<script>
+    // Debugging utility
+    function logDebug(message) {
+        console.log(`[DEBUG] ${message}`);
+    }
 
-        nameInput.addEventListener('input', () => {
-            userSignature.textContent = nameInput.value;
-            userSignature.style.opacity = nameInput.value ? '1' : '0';
-        });
+    const nameInput = document.getElementById('nameInput');
+    const userSignature = document.getElementById('userSignature');
+    const acceptCheckbox = document.getElementById('acceptCheckbox');
+    const acceptBtn = document.getElementById('acceptBtn');
 
-        acceptCheckbox.addEventListener('change', () => {
-            acceptBtn.disabled = !acceptCheckbox.checked;
-        });
+    // Check if the user has already accepted the terms
+    const hasAccepted = localStorage.getItem('termsAccepted');
 
-        acceptBtn.addEventListener('click', () => {
+    if (hasAccepted === 'true') {
+        logDebug('User has previously accepted the terms. Redirecting to /calc...');
+        window.location.href = '/calc';
+    } else {
+        logDebug('User has not accepted the terms yet.');
+    }
+
+    // Update signature dynamically based on input
+    nameInput.addEventListener('input', () => {
+        try {
+            const nameValue = nameInput.value;
+            userSignature.textContent = nameValue;
+            userSignature.style.opacity = nameValue ? '1' : '0';
+            logDebug(`User signature updated: ${nameValue}`);
+        } catch (error) {
+            console.error('Error updating user signature:', error);
+        }
+    });
+
+    // Enable or disable the accept button based on checkbox status
+    acceptCheckbox.addEventListener('change', () => {
+        try {
+            const isChecked = acceptCheckbox.checked;
+            acceptBtn.disabled = !isChecked;
+            logDebug(`Accept button is now ${isChecked ? 'enabled' : 'disabled'}`);
+        } catch (error) {
+            console.error('Error updating accept button state:', error);
+        }
+    });
+
+    // Handle accept button click
+    acceptBtn.addEventListener('click', () => {
+        try {
             if (acceptCheckbox.checked) {
-                // Redirect or perform next action
-                window.location.href = '/calc';
+                // Save acceptance status in localStorage
+                localStorage.setItem('termsAccepted', 'true');
+                logDebug('User has accepted the terms. Saving status and redirecting...');
 
+                // Redirect to the calculator page
+                window.location.href = '/calc';
+            } else {
+                logDebug('Accept button clicked, but terms checkbox is not checked.');
+                alert('Please accept the terms and conditions to proceed.');
             }
-        });
-    </script>
+        } catch (error) {
+            console.error('Error handling accept button click:', error);
+        }
+    });
+
+    // Catch unexpected errors and log them
+    window.addEventListener('error', (event) => {
+        console.error('[ERROR] Unexpected error occurred:', event.message);
+    });
+</script>
+
 </body>
 </html>
